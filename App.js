@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import { Ionicons } from '@expo/vector-icons'
 import { Platform } from 'react-native'
-
+import { Notifications } from 'expo'
 import HomeScreen from './screens/Home'
 import FavoritesScreen from './screens/Favorites'
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
 
 import firebase, { db } from './firebase'
+import myNotifications from './notifications'
 
 const AppStack = createBottomTabNavigator(
   {
@@ -55,6 +56,15 @@ const MainNavigator = createSwitchNavigator(
 )
 
 export default class App extends Component {
+  componentDidMount() {
+    myNotifications()
+    this._notificationSubscription = Notifications.addListener(this._handleNotification)
+  }
+
+  _handleNotification = notification => {
+    console.warn('hola ', { ...notification })
+  }
+
   render() {
     return <MainNavigator />
   }
